@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Request #{{ service_request.id }} | Muranga Service System{% endblock %}
+{% block content %}
+<div class="section-head"><div><p class="help">SERVICE REQUEST #{{ service_request.id }}</p><h1>{{ service_request.title }}</h1></div><span class="badge badge-{{ service_request.status|lower|replace(' ','-') }}">{{ service_request.status }}</span></div>
+<div class="two-col">
+<section class="card"><h2>Request details</h2><p><strong>Category:</strong> {{ service_request.category }}</p><p><strong>Location:</strong> {{ service_request.location }}</p><p><strong>Submitted by:</strong> {{ service_request.citizen_name }}</p><p><strong>Date submitted:</strong> {{ service_request.created_at }}</p><p><strong>Last updated:</strong> {{ service_request.updated_at }}</p><h3>Description</h3><p style="white-space:pre-wrap">{{ service_request.description }}</p>
+{% if service_request.image_filename %}<h3>Attached photo</h3><img class="detail-image" src="{{ url_for('static', filename='uploads/' + service_request.image_filename) }}" alt="Photo attached to service request">{% endif %}
+</section>
+<section class="card"><h2>Status and updates</h2><p><span class="badge badge-pending">Pending</span> → <span class="badge badge-in-progress">In Progress</span> → <span class="badge badge-resolved">Resolved</span></p><p><strong>Current status:</strong> {{ service_request.status }}</p><h3>Administrator note</h3><p>{{ service_request.admin_note or 'No administrator note has been added yet.' }}</p>{% if current_user.role == 'admin' %}<a class="btn" href="{{ url_for('admin_dashboard') }}">Back to admin dashboard</a>{% else %}<a class="btn btn-outline" href="{{ url_for('dashboard') }}">Back to my requests</a>{% endif %}</section>
+</div>
+{% endblock %}

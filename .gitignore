@@ -1,0 +1,9 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+muranga.db
+static/uploads/*
+!static/uploads/.gitkeep
+.pytest_cache/

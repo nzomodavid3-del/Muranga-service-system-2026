@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Admin dashboard | Muranga Service System{% endblock %}
+{% block content %}
+<div class="section-head"><div><h1>Administrator dashboard</h1><p class="help">Review citizen reports, update status and add follow-up notes.</p></div></div>
+<div class="stats">
+<div class="stat"><span>Total requests</span><strong>{{ totals.total }}</strong></div><div class="stat"><span>Pending</span><strong>{{ totals.pending }}</strong></div><div class="stat"><span>In progress</span><strong>{{ totals.in_progress }}</strong></div><div class="stat"><span>Resolved</span><strong>{{ totals.resolved }}</strong></div>
+</div>
+<div class="section-head"><h2>All service requests</h2><form method="get" class="inline-form"><label for="status">Filter:</label><select id="status" name="status"><option value="">All statuses</option>{% for s in ['Pending','In Progress','Resolved'] %}<option value="{{ s }}" {% if status_filter == s %}selected{% endif %}>{{ s }}</option>{% endfor %}</select><button class="btn btn-outline" type="submit">Apply</button></form></div>
+{% if requests_list %}
+<div class="table-wrap"><table><thead><tr><th>Request</th><th>Citizen / location</th><th>Category</th><th>Status and update</th></tr></thead><tbody>
+{% for item in requests_list %}<tr><td><a href="{{ url_for('request_detail', request_id=item.id) }}"><strong>#{{ item.id }} · {{ item.title }}</strong></a><br><span class="help">{{ item.created_at[:10] }}</span></td><td>{{ item.citizen_name }}<br><span class="help">{{ item.location }}</span></td><td>{{ item.category }}</td><td><form class="inline-form" method="post" action="{{ url_for('update_request', request_id=item.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><select name="status" aria-label="Request status">{% for s in ['Pending','In Progress','Resolved'] %}<option value="{{ s }}" {% if item.status == s %}selected{% endif %}>{{ s }}</option>{% endfor %}</select><input name="admin_note" maxlength="1000" placeholder="Optional note" value="{{ item.admin_note or '' }}" aria-label="Administrator note"><button class="btn" type="submit">Save</button></form></td></tr>{% endfor %}
+</tbody></table></div>
+{% else %}<div class="card empty">No requests match this filter yet.</div>{% endif %}
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Home | Muranga Service System{% endblock %}
+{% block content %}
+<section class="hero">
+  <p>COUNTY SERVICES · CITIZEN PORTAL</p>
+  <h1>Report a problem.<br>Help improve our community.</h1>
+  <p>Submit a service request to report water issues, damaged roads, broken streetlights, garbage collection problems and other county concerns. Track progress from submission to resolution.</p>
+  <div class="actions">
+    {% if current_user.is_authenticated %}
+      {% if current_user.role == 'admin' %}<a class="btn btn-light" href="{{ url_for('admin_dashboard') }}">Open admin dashboard</a>{% else %}<a class="btn btn-light" href="{{ url_for('new_request') }}">Submit a request</a><a class="btn btn-outline" href="{{ url_for('dashboard') }}" style="color:white;border-color:#b9d5df">Track my requests</a>{% endif %}
+    {% else %}
+      <a class="btn btn-light" href="{{ url_for('register') }}">Create an account</a><a class="btn btn-outline" href="{{ url_for('login') }}" style="color:white;border-color:#b9d5df">Sign in</a>
+    {% endif %}
+  </div>
+</section>
+<h2>Service request overview</h2>
+<div class="stats">
+  <div class="stat"><span>Total requests</span><strong>{{ totals.total }}</strong></div>
+  <div class="stat"><span>Pending</span><strong>{{ totals.pending }}</strong></div>
+  <div class="stat"><span>In progress</span><strong>{{ totals.in_progress }}</strong></div>
+  <div class="stat"><span>Resolved</span><strong>{{ totals.resolved }}</strong></div>
+</div>
+<div class="section-head"><h2>Recently submitted requests</h2></div>
+{% if latest %}
+<div class="table-wrap"><table><thead><tr><th>Request</th><th>Category</th><th>Location</th><th>Status</th></tr></thead><tbody>
+{% for item in latest %}<tr><td>{{ item.title }}</td><td>{{ item.category }}</td><td>{{ item.location }}</td><td><span class="badge badge-{{ item.status|lower|replace(' ','-') }}">{{ item.status }}</span></td></tr>{% endfor %}
+</tbody></table></div>
+{% else %}<div class="card empty">No service requests have been submitted yet. Create an account to submit the first one.</div>{% endif %}
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Submit request | Muranga Service System{% endblock %}
+{% block content %}
+<div class="form-card"><h1>Submit a service request</h1><p class="help">Provide enough detail to help the county team understand the issue.</p>
+<form method="post" enctype="multipart/form-data">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<div class="field"><label for="title">Short title *</label><input id="title" name="title" maxlength="120" required placeholder="e.g. Broken streetlight near the market" value="{{ request.form.get('title','') }}"></div>
+<div class="field"><label for="category">Category *</label><select id="category" name="category" required><option value="">Choose a category</option>{% for category in categories %}<option value="{{ category }}" {% if request.form.get('category') == category %}selected{% endif %}>{{ category }}</option>{% endfor %}</select></div>
+<div class="field"><label for="location">Location *</label><input id="location" name="location" maxlength="200" required placeholder="Estate, road, village or nearby landmark" value="{{ request.form.get('location','') }}"></div>
+<div class="field"><label for="description">Description *</label><textarea id="description" name="description" maxlength="3000" required placeholder="Describe the issue, when it started and any useful details.">{{ request.form.get('description','') }}</textarea></div>
+<div class="field"><label for="image">Photo (optional)</label><input id="image" type="file" name="image" accept=".png,.jpg,.jpeg,.gif,.webp,image/png,image/jpeg,image/gif,image/webp"><div class="help">Maximum 5 MB. Accepted formats: PNG, JPG, GIF, WEBP.</div></div>
+<button class="btn" type="submit">Submit request</button> <a class="btn btn-outline" href="{{ url_for('dashboard') }}">Cancel</a>
+</form></div>
+{% endblock %}

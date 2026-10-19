@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Register | Muranga Service System{% endblock %}
+{% block content %}
+<div class="form-card"><h1>Create a citizen account</h1><p class="help">Register to submit service requests and track their progress.</p>
+<form method="post">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<div class="field"><label for="full_name">Full name *</label><input id="full_name" name="full_name" autocomplete="name" required maxlength="100" value="{{ request.form.get('full_name','') }}"></div>
+<div class="field"><label for="email">Email address *</label><input id="email" type="email" name="email" autocomplete="email" required maxlength="254" value="{{ request.form.get('email','') }}"></div>
+<div class="field"><label for="password">Password *</label><input id="password" type="password" name="password" autocomplete="new-password" minlength="8" required><div class="help">Use at least 8 characters.</div></div>
+<div class="field"><label for="confirm_password">Confirm password *</label><input id="confirm_password" type="password" name="confirm_password" autocomplete="new-password" minlength="8" required></div>
+<button class="btn" type="submit">Create account</button>
+</form><p>Already registered? <a href="{{ url_for('login') }}">Sign in</a>.</p></div>
+{% endblock %}
